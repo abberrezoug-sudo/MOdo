@@ -10,15 +10,15 @@ const restaurantSchema = new Schema(
     },
 
     image: {
-      url: {
-        type: String,
-        default: "",
-      },
-      publicId: {
-        type: String,
-        default: "",
-      },
-    },
+  url: {
+    type: String,
+    default: "",
+  },
+  publicId: {
+    type: String,
+    default: "",
+  },
+},
 
     address: {
       type: String,

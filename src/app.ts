@@ -6,6 +6,8 @@ import morgan from "morgan";
 import restaurantRoutes from "./routes/restaurant.routes.js";
 import sectionRoutes from "./routes/section.routes.js";
 
+import menuItemRoutes from "./routes/menu-item.routes.js";
+
 
 const app = express();
 
@@ -30,4 +32,5 @@ app.get("/", (_, res) => {
 });
 app.use("/api/restaurants", restaurantRoutes);
 app.use("/api/sections", sectionRoutes);
+app.use("/api/menu-items", menuItemRoutes);
 export default app;
