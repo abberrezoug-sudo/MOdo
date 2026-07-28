@@ -4,6 +4,9 @@ import helmet from "helmet";
 import compression from "compression";
 import morgan from "morgan";
 import restaurantRoutes from "./routes/restaurant.routes.js";
+import sectionRoutes from "./routes/section.routes.js";
+
+
 const app = express();
 
 app.use(express.json());
@@ -18,6 +21,7 @@ app.use(compression());
 
 app.use(morgan("dev"));
 
+
 app.get("/", (_, res) => {
   res.json({
     success: true,
@@ -25,4 +29,5 @@ app.get("/", (_, res) => {
   });
 });
 app.use("/api/restaurants", restaurantRoutes);
+app.use("/api/sections", sectionRoutes);
 export default app;

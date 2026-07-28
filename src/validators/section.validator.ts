@@ -5,7 +5,7 @@ export const createSectionSchema = z.object({
     .string()
     .trim()
     .min(2, "Section name must contain at least 2 characters.")
-    .max(50, "Section name cannot exceed 50 characters."),
+    .max(100, "Section name cannot exceed 100 characters."),
 
   description: z
     .string()
@@ -14,14 +14,11 @@ export const createSectionSchema = z.object({
     .optional(),
 
   displayOrder: z
+    .coerce
     .number()
     .int()
     .min(0)
-    .optional(),
-
-  isVisible: z
-    .boolean()
-    .optional(),
+    .default(0),
 });
 
 export type CreateSectionDto = z.infer<typeof createSectionSchema>;
