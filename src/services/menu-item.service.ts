@@ -97,7 +97,7 @@ class MenuItemService {
     );
 
   return {
-    ...menuItem.toObject(),
+    ...menuItem,
 
     supplements: supplements.map((item: any) => ({
       _id: item.supplementId._id,

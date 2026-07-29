@@ -5,12 +5,32 @@ class MenuItemRepository {
     return MenuItem.create(data);
   }
 
-  async findAll() {
-    return MenuItem.find()
-      .populate("sectionId", "name")
-      .sort({ createdAt: 1 });
-  }
-
+async findAll() {
+  return MenuItem.aggregate([
+    {
+      $lookup: {
+        from: "sections",
+        localField: "sectionId",
+        foreignField: "_id",
+        as: "section",
+      },
+    },
+    {
+      $unwind: "$section",
+    },
+    {
+      $sort: {
+        createdAt: 1,
+      },
+    },
+    {
+      $project: {
+        __v: 0,
+        "section.__v": 0,
+      },
+    },
+  ]);
+}
   async findById(id: string) {
     return MenuItem.findById(id)
       .populate("sectionId", "name");
