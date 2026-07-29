@@ -4,7 +4,7 @@ import { AppError } from "../utils/app-error.js";
 import { validateObjectId } from "../utils/validate-object-id.js";
 import { CreateMenuItemDto } from "../validators/create-menu-item.validator.js";
 import { UpdateMenuItemDto } from "../validators/update-menu-item.validator.js";
-
+import menuItemSupplementRepository from "../repositories/menu-item-supplement.repository.js";
 class MenuItemService {
   async createMenuItem(data: CreateMenuItemDto) {
     validateObjectId(data.sectionId);
@@ -31,23 +31,31 @@ class MenuItemService {
     return menuItemRepository.create(data);
   }
 
-  async getMenuItems() {
-    return menuItemRepository.findAll();
+ async getMenuItems() {
+  const menuItems =
+    await menuItemRepository.findAll();
+
+  return Promise.all(
+    menuItems.map((item) =>
+      this.attachSupplements(item)
+    )
+  );
+}
+ async getMenuItem(id: string) {
+  validateObjectId(id);
+
+  const menuItem =
+    await menuItemRepository.findById(id);
+
+  if (!menuItem) {
+    throw new AppError(
+      "Menu item not found.",
+      404
+    );
   }
 
-  async getMenuItem(id: string) {
-    validateObjectId(id);
-
-    const menuItem =
-      await menuItemRepository.findById(id);
-
-    if (!menuItem) {
-      throw new AppError("Menu item not found.", 404);
-    }
-
-    return menuItem;
-  }
-
+  return this.attachSupplements(menuItem);
+}
   async getMenuItemsBySection(sectionId: string) {
     validateObjectId(sectionId);
 
@@ -82,6 +90,29 @@ class MenuItemService {
 
     return menuItem;
   }
+  private async attachSupplements(menuItem: any) {
+  const supplements =
+    await menuItemSupplementRepository.findByMenuItem(
+      menuItem._id.toString()
+    );
+
+  return {
+    ...menuItem.toObject(),
+
+    supplements: supplements.map((item: any) => ({
+      _id: item.supplementId._id,
+      name: item.supplementId.name,
+      description: item.supplementId.description,
+      image: item.supplementId.image,
+
+      price:
+        item.extraPrice ??
+        item.supplementId.price,
+
+      maxQuantity: item.maxQuantity,
+    })),
+  };
+}
 }
 
 export default new MenuItemService();
