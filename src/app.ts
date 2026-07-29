@@ -7,8 +7,8 @@ import restaurantRoutes from "./routes/restaurant.routes.js";
 import sectionRoutes from "./routes/section.routes.js";
 
 import menuItemRoutes from "./routes/menu-item.routes.js";
-
-
+import supplementRoutes from "./routes/supplement.routes.js";
+import menuItemSupplementRoutes from "./routes/menu-item-supplement.routes.js";
 const app = express();
 
 app.use(express.json());
@@ -33,4 +33,9 @@ app.get("/", (_, res) => {
 app.use("/api/restaurants", restaurantRoutes);
 app.use("/api/sections", sectionRoutes);
 app.use("/api/menu-items", menuItemRoutes);
+app.use("/api/supplements", supplementRoutes);
+app.use(
+  "/api/menu-item-supplements",
+  menuItemSupplementRoutes
+);
 export default app;
