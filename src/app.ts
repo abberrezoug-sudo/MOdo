@@ -9,6 +9,7 @@ import sectionRoutes from "./routes/section.routes.js";
 import menuItemRoutes from "./routes/menu-item.routes.js";
 import supplementRoutes from "./routes/supplement.routes.js";
 import menuItemSupplementRoutes from "./routes/menu-item-supplement.routes.js";
+import ticketRoutes from "./routes/ticket.routes.js";
 const app = express();
 
 app.use(express.json());
@@ -38,4 +39,5 @@ app.use(
   "/api/menu-item-supplements",
   menuItemSupplementRoutes
 );
+app.use("/api/tickets", ticketRoutes);
 export default app;

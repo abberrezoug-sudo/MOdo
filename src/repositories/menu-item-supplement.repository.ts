@@ -6,7 +6,7 @@ class MenuItemSupplementRepository{
     async findAll(){
         return MenuItemSupplement.find()
          .populate("menuItemId", "name")
-         .populate("suplementId")
+         .populate("supplementId")
     }
      async findById(id: string) {
     return MenuItemSupplement.findById(id)

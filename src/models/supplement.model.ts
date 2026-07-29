@@ -17,6 +17,12 @@ const supplementSchema = new Schema(
       maxlength: 255,
     },
 
+    price: {
+      type: Number,
+      required: true,
+      min: 0,
+    },
+
     image: {
       url: {
         type: String,
