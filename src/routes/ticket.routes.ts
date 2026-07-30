@@ -5,24 +5,52 @@ import {
   getTickets,
   getTicket,
   getStatistics,
-  deleteTicket
+  deleteTicket,
 } from "../controllers/ticket.controller.js";
+
+import { authMiddleware } from "../middlewares/auth.middleware.js";
+import { checkRole } from "../middlewares/check-role.middleware.js";
 
 const router = Router();
 
-// Créer un ticket
-router.post("/", createTicket);
+// Créer un ticket (Tablet uniquement)
+router.post(
+  "/",
+  authMiddleware,
+  checkRole("tablet"),
+  createTicket
+);
 
-// Afficher tous les tickets
-router.get("/", getTickets);
+// Voir tous les tickets (Cashier uniquement)
+router.get(
+  "/",
+  authMiddleware,
+  checkRole("cashier"),
+  getTickets
+);
+
+// Statistiques (Cashier uniquement)
 router.get(
   "/statistics",
+  authMiddleware,
+  checkRole("cashier"),
   getStatistics
 );
-// Afficher un ticket par ID
-router.get("/:id", getTicket);
 
-// Supprimer un ticket
-router.delete("/:id", deleteTicket);
+// Voir une facture (Cashier + Tablet)
+router.get(
+  "/:id",
+  authMiddleware,
+  checkRole("cashier", "tablet"),
+  getTicket
+);
+
+// Supprimer une facture (Cashier uniquement)
+router.delete(
+  "/:id",
+  authMiddleware,
+  checkRole("cashier"),
+  deleteTicket
+);
 
 export default router;

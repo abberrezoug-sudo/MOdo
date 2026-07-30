@@ -10,6 +10,7 @@ import menuItemRoutes from "./routes/menu-item.routes.js";
 import supplementRoutes from "./routes/supplement.routes.js";
 import menuItemSupplementRoutes from "./routes/menu-item-supplement.routes.js";
 import ticketRoutes from "./routes/ticket.routes.js";
+import authRoutes from "./routes/auth.routes.js";
 const app = express();
 
 app.use(express.json());
@@ -40,4 +41,5 @@ app.use(
   menuItemSupplementRoutes
 );
 app.use("/api/tickets", ticketRoutes);
+app.use("/api/auth", authRoutes);
 export default app;

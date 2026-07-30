@@ -1,5 +1,6 @@
 import { Router } from "express";
 import upload from "../middlewares/upload.middleware.js";
+
 import {
   createMenuItem,
   getMenuItems,
@@ -9,26 +10,59 @@ import {
   deleteMenuItem,
 } from "../controllers/menu-item.controller.js";
 
+import { authMiddleware } from "../middlewares/auth.middleware.js";
+import { checkRole } from "../middlewares/check-role.middleware.js";
+
 const router = Router();
 
+// Créer un menu (Cashier)
 router.post(
   "/",
+  authMiddleware,
+  checkRole("cashier"),
   upload.single("image"),
   createMenuItem
 );
 
-router.get("/", getMenuItems);
+// Voir tous les menus (Cashier + Tablet)
+router.get(
+  "/",
+  authMiddleware,
+  checkRole("cashier", "tablet"),
+  getMenuItems
+);
 
-router.get("/section/:sectionId", getMenuItemsBySection);
+// Voir les menus d'une section (Cashier + Tablet)
+router.get(
+  "/section/:sectionId",
+  authMiddleware,
+  checkRole("cashier", "tablet"),
+  getMenuItemsBySection
+);
 
-router.get("/:id", getMenuItem);
+// Voir un menu (Cashier + Tablet)
+router.get(
+  "/:id",
+  authMiddleware,
+  checkRole("cashier", "tablet"),
+  getMenuItem
+);
 
+// Modifier un menu (Cashier)
 router.patch(
   "/:id",
+  authMiddleware,
+  checkRole("cashier"),
   upload.single("image"),
   updateMenuItem
 );
 
-router.delete("/:id", deleteMenuItem);
+// Supprimer un menu (Cashier)
+router.delete(
+  "/:id",
+  authMiddleware,
+  checkRole("cashier"),
+  deleteMenuItem
+);
 
 export default router;

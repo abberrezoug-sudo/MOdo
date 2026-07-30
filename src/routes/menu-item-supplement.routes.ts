@@ -1,4 +1,5 @@
 import { Router } from "express";
+
 import {
   createMenuItemSupplement,
   getMenuItemSupplements,
@@ -8,18 +9,57 @@ import {
   deleteMenuItemSupplement,
 } from "../controllers/menu-item-supplement.controller.js";
 
+import { authMiddleware } from "../middlewares/auth.middleware.js";
+import { checkRole } from "../middlewares/check-role.middleware.js";
+
 const router = Router();
 
-router.post("/", createMenuItemSupplement);
+// Associer un supplément à un menu (Cashier)
+router.post(
+  "/",
+  authMiddleware,
+  checkRole("cashier"),
+  createMenuItemSupplement
+);
 
-router.get("/", getMenuItemSupplements);
+// Voir toutes les associations (Cashier)
+router.get(
+  "/",
+  authMiddleware,
+  checkRole("cashier"),
+  getMenuItemSupplements
+);
 
-router.get("/menu-item/:menuItemId", getSupplementsByMenuItem);
+// Voir les suppléments d'un menu (Cashier + Tablet)
+router.get(
+  "/menu-item/:menuItemId",
+  authMiddleware,
+  checkRole("cashier", "tablet"),
+  getSupplementsByMenuItem
+);
 
-router.get("/:id", getMenuItemSupplement);
+// Voir une association (Cashier)
+router.get(
+  "/:id",
+  authMiddleware,
+  checkRole("cashier"),
+  getMenuItemSupplement
+);
 
-router.patch("/:id", updateMenuItemSupplement);
+// Modifier une association (Cashier)
+router.patch(
+  "/:id",
+  authMiddleware,
+  checkRole("cashier"),
+  updateMenuItemSupplement
+);
 
-router.delete("/:id", deleteMenuItemSupplement);
+// Supprimer une association (Cashier)
+router.delete(
+  "/:id",
+  authMiddleware,
+  checkRole("cashier"),
+  deleteMenuItemSupplement
+);
 
 export default router;
